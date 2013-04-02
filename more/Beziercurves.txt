@@ -1,0 +1,131 @@
+movie 'Beziercurves.swf' {
+// flash 7, total frames: 1, frame rate: 12 fps, 550x400 px, compressed
+
+  frame 1 {
+    function redraw() {
+      _root.clear();
+      lineStyle(0.5, 0, 100);
+      drawcontrolpoints();
+      curvesegmenttraditional(X[0], Y[0], X[2], Y[2], X[1], Y[1]);
+      quadraticbeziercurve(X[3], Y[3], X[4], Y[4], X[5], Y[5]);
+    }
+
+    function drawcontrolpoints() {
+      moveTo(X[0], Y[0]);
+      i = 0;
+      while (i < 6) {
+        if (i != 3) {
+          lineTo(X[i], Y[i]);
+        }
+        drawpoint(X[i], Y[i], 4);
+        ++i;
+      }
+    }
+
+    function quadraticbeziercurve(x0, y0, x1, y1, x2, y2) {
+      dist = Math.sqrt(Math.pow(x0 - x1, 2) + Math.pow(y0 - y1, 2)) + Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+      steps = dist / minlength;
+      A = 1 / steps;
+      lineStyle(0.5, 16711680, 50);
+      moveTo(x0, y0);
+      t = 0;
+      while (t < 1) {
+        x = x0 * bernsteinpolynomial(0, 2, t) + x1 * bernsteinpolynomial(1, 2, t) + x2 * bernsteinpolynomial(2, 2, t);
+        y = y0 * bernsteinpolynomial(0, 2, t) + y1 * bernsteinpolynomial(1, 2, t) + y2 * bernsteinpolynomial(2, 2, t);
+        lineTo(x, y);
+        drawpoint(x, y, 2);
+        t += A;
+      }
+      lineTo(x2, y2);
+    }
+
+    function bernsteinpolynomial(i, n, t) {
+      return binomailcoefficient(n, i) * Math.pow(t, i) * Math.pow(1 - t, n - i);
+    }
+
+    function binomailcoefficient(n, k) {
+      return factorial(n) / factorial(n - k) * factorial(k);
+    }
+
+    function factorial(n) {
+      if (n <= 1) {
+        return 1;
+      } else {
+        return n * factorial(n - 1);
+      }
+    }
+
+    function curvesegmenttraditional(ax, ay, bx, by, cx, cy) {
+      dist = Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2)) + Math.sqrt(Math.pow(bx - cx, 2) + Math.pow(by - cy, 2));
+      steps = dist / minlength;
+      lineStyle(0.5, 255, 50);
+      moveTo(ax, ay);
+      i = 0;
+      while (i < steps) {
+        x = getstepx(getstepx(ax, cx, i, steps), getstepx(cx, bx, i, steps), i, steps);
+        y = getstepy(getstepy(ay, cy, i, steps), getstepy(cy, by, i, steps), i, steps);
+        lineTo(x, y);
+        drawpoint(x, y, 2);
+        ++i;
+      }
+    }
+
+    function getstepx(x1, x2, stepcount, numofsteps) {
+      x = ((numofsteps - stepcount) * x1 + stepcount * x2) / numofsteps;
+      return x;
+    }
+
+    function getstepy(y1, y2, stepcount, numofsteps) {
+      y = ((numofsteps - stepcount) * y1 + stepcount * y2) / numofsteps;
+      return y;
+    }
+
+    function drawpoint(x, y, cl) {
+      moveTo(x - cl, y - cl);
+      lineTo(x + cl, y + cl);
+      moveTo(x + cl, y - cl);
+      lineTo(x - cl, y + cl);
+      moveTo(x, y);
+    }
+
+    minlength = 30;
+    currentdrag = -1;
+    X = [70, 210, 280, 270, 410, 480];
+    Y = [70, 130, 350, 70, 130, 350];
+    redraw();
+    onMouseDown = function () {
+      i = 0;
+      while (i < 6) {
+        if (Math.abs(_xmouse - X[i]) < 8 && Math.abs(_ymouse - Y[i]) < 8) {
+          currentdrag = i;
+          break;
+        }
+        ++i;
+      }
+    };
+
+    onMouseUp = function () {
+      currentdrag = -1;
+      redraw();
+    };
+
+    onMouseMove = function () {
+      if (currentdrag != -1) {
+        i = currentdrag;
+        if (i >= 3) {
+          X[i - 3] -= X[i] - _xmouse;
+          Y[i - 3] -= Y[i] - _ymouse;
+        } else {
+          if (i <= 2) {
+            X[i + 3] -= X[i] - _xmouse;
+            Y[i + 3] -= Y[i] - _ymouse;
+          }
+        }
+        X[i] = _xmouse;
+        Y[i] = _ymouse;
+        redraw();
+      }
+    };
+
+  }
+}

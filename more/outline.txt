@@ -1,0 +1,21 @@
+calibration
+ - motor
+ - arm length
+
+control
+ - triangle, cosine law
+ - 2 axis move simultaneously
+ - each move with different speed, such that they arrive at the same time
+ - touching the paper
+ - (no need) pen tip modulation
+ - finer speed control - the averaging technique
+
+programming
+ - C-style object orienting
+ - cooperative concurrency
+
+presentation materials
+ - papers
+ - ruler
+ - adhesive tape
+ - servo motor

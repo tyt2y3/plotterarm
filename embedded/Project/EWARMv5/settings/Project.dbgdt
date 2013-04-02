@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Project>
+  <Desktop>
+    <Static>
+      <Debug-Log>
+        
+        
+      <PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows><ColumnWidth0>20</ColumnWidth0><ColumnWidth1>942</ColumnWidth1></Debug-Log>
+      <Build>
+        
+        
+        
+        
+      <PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows><Window><Factory>Debug-Log</Factory></Window><Window><Factory>TerminalIO</Factory></Window></Windows></PreferedWindows><ColumnWidth0>20</ColumnWidth0><ColumnWidth1>706</ColumnWidth1><ColumnWidth2>188</ColumnWidth2><ColumnWidth3>47</ColumnWidth3></Build>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>177</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+      </Workspace>
+      <Disassembly>
+        
+        
+        
+      <PreferedWindows><Position>2</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows><MixedMode>1</MixedMode><CodeCovShow>0</CodeCovShow><InstrProfShow>0</InstrProfShow></Disassembly>
+    <Register><PreferedWindows><Position>2</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows></Register><TerminalIO><PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows><Window><Factory>Debug-Log</Factory></Window><Window><Factory>Build</Factory></Window></Windows></PreferedWindows><InputSource>1</InputSource><InputMode>10</InputMode><Filename>$PROJ_DIR$\TermIOInput.txt</Filename><InputEcho>1</InputEcho><ShowReset>0</ShowReset></TerminalIO><Watch><Format><struct_types/><watch_formats/></Format><PreferedWindows><Position>2</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows><Column0>100</Column0><Column1>100</Column1><Column2>100</Column2><Column3>100</Column3></Watch></Static>
+    <Windows>
+      
+      
+      
+    <Wnd0>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-25535-20201</Identity>
+            <TabName>Workspace</TabName>
+            <Factory>Workspace</Factory>
+            <Session>
+              
+            <NodeDict><ExpandedNode>Project</ExpandedNode><ExpandedNode>Project/CMSIS</ExpandedNode><ExpandedNode>Project/Output</ExpandedNode><ExpandedNode>Project/StdPeriph_Driver</ExpandedNode><ExpandedNode>Project/User</ExpandedNode></NodeDict></Session>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd0><Wnd1><Tabs><Tab><Identity>TabID-17531-26788</Identity><TabName>Debug Log</TabName><Factory>Debug-Log</Factory><Session/></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd1></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>C:\Users\user\Documents\elec3300\plotterarm\Project\main.c</Filename><XPos>0</XPos><YPos>6</YPos><SelStart>242</SelStart><SelEnd>242</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\Users\user\Documents\elec3300\plotterarm\Project\motor.h</Filename><XPos>0</XPos><YPos>3</YPos><SelStart>189</SelStart><SelEnd>189</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\Users\user\Documents\elec3300\plotterarm\Project\motor.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>1670</SelStart><SelEnd>1670</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\Users\user\Documents\elec3300\plotterarm\Project\pwm.c</Filename><XPos>0</XPos><YPos>110</YPos><SelStart>363</SelStart><SelEnd>363</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\Users\user\Documents\elec3300\plotterarm\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_tim.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>1075</SelStart><SelEnd>1075</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\Users\user\Documents\elec3300\plotterarm\Libraries\CMSIS\Core\CM3\stm32f10x.h</Filename><XPos>0</XPos><YPos>304</YPos><SelStart>21709</SelStart><SelEnd>21709</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\Users\user\Documents\elec3300\plotterarm\Project\plotter.c</Filename><XPos>0</XPos><YPos>102</YPos><SelStart>2522</SelStart><SelEnd>2522</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\Users\user\Documents\elec3300\plotterarm\Project\data.c</Filename><XPos>0</XPos><YPos>69</YPos><SelStart>2528</SelStart><SelEnd>2528</SelEnd></Tab><ActiveTab>7</ActiveTab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-01c1ed30><key>iaridepm.enu1</key></Toolbar-01c1ed30></Sizes></Row0><Row1><Sizes><Toolbar-01c95270><key>debuggergui.enu1</key></Toolbar-01c95270></Sizes></Row1></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>406</Bottom><Right>275</Right><x>-2</x><y>-2</y><xscreen>236</xscreen><yscreen>185</yscreen><sizeHorzCX>172767</sizeHorzCX><sizeHorzCY>272459</sizeHorzCY><sizeVertCX>202782</sizeVertCX><sizeVertCY>600884</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>198</Bottom><Right>1368</Right><x>-2</x><y>-2</y><xscreen>1370</xscreen><yscreen>200</yscreen><sizeHorzCX>1002928</sizeHorzCX><sizeHorzCY>294551</sizeHorzCY><sizeVertCX>146413</sizeVertCX><sizeVertCY>294551</sizeVertCY></Rect></Wnd1></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Project>
+
+

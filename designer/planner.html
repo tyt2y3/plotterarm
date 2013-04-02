@@ -1,0 +1,82 @@
+<body>
+<script src='raphael-min.js'></script>
+<script src='dragger.js'></script>
+<script src='drawer.js'></script>
+
+<div class='main_canvas' id='canvas' style='width:800px; height:600px;'>
+</div>
+<div class='side_pane' style='position:absolute; left:810px; top:10px; height:600px;'>
+	Plotterarm simulator<br>
+	<textarea id='out' style='width:100%; height:400px;'></textarea>
+</div>
+
+<script>
+(function()
+{
+
+function cosine(a,b,c)
+{
+	return (a*a+b*b-c*c)/(2*a*b);
+}
+
+function demo_application1()
+{
+	var La=150;
+	var Lb=140;
+
+	var out = document.getElementById('out');
+
+	var TP = new drawer();
+	var DG = new dragger(TP,'canvas');
+	var rl = Raphael('canvas');
+	TP.P=[ {x:300,y:300}, {x:350,y:350} ];
+	//
+	TP.redraw=function()
+	{
+		rl.clear();
+		rl.rect(0,0,800-1,600-1).attr({fill:'none'});
+
+		TP.moveTo(TP.P[0]);
+		TP.lineTo(TP.P[1]);
+		TP.drawpoint(TP.P[0], 6,1);
+		TP.drawpoint(TP.P[1], 6,3);
+
+		var L = Math.sqrt((TP.P[1].x-TP.P[0].x)*(TP.P[1].x-TP.P[0].x)+(TP.P[1].y-TP.P[0].y)*(TP.P[1].y-TP.P[0].y));
+		if( L>La+Lb)
+			console.log('beyond outer bound');
+		var the1 = Math.acos(cosine(L,Lb,La));
+		var the2 = Math.acos(cosine(La,Lb,L));
+		var the3 = Math.atan( (TP.P[1].y-TP.P[0].y) / (TP.P[1].x-TP.P[0].x) );
+		var beta = Math.PI/2 - the3 - the1;
+		if( !beta)
+			console.log('beyond inner bound');
+		var alpha = Math.PI - the2;
+
+		var V = {x:Lb*Math.sin(beta), y:Lb*Math.cos(beta)};
+		var B = {x:TP.P[1].x-V.x, y:TP.P[1].y-V.y};
+
+		TP.moveTo(TP.P[0]);
+		TP.lineTo(B);
+		TP.lineTo(TP.P[1]);
+
+		TP.drawpath(rl);
+		out.value='{x:'+(TP.P[1].x-TP.P[0].x)+',y:'+(TP.P[1].y-TP.P[0].y)+'}\n';
+		out.value+='beta:'+beta+', alpha:'+alpha;
+	}
+
+	//init
+	TP.redraw();
+	console.log(1450*1450+1400*1400-2121*2121);
+	console.log(Math.acos(cosine(1450,1400,2121)));
+	/*
+	console.log(Math.atan(0.5));
+	//var the1=1.464534, the2=0.487865, the3=0.785398;
+	var the1=1.259129, the2=0.788683, the3=0.463648;
+	console.log(Math.PI/2 - the3 - the1);
+	console.log(Math.PI - the2); */
+}
+
+app1 = new demo_application1();
+}());
+</script>
+</body>

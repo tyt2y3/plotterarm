@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<head>
+</head>
+<body>
+<button id='cmd1'></button>
+<input id='param1' value='COM4'></input>
+<button id='cmd2'></button>
+<br>
+<textarea id='sender' style='width:400px;height:200px;'>
+[["M",2000,0],
+["l",400,0],["m",-400,100],
+["l",400,0],["m",-400,100],
+["l",400,0],["m",-400,100],
+["l",100,0],["l",100,0],["l",100,0],["l",100,0],["m",-400,100],
+["l",100,0],["l",100,0],["l",100,0],["l",100,0],
+["m",-400,-400],
+["l",0,400],["m",100,-400],
+["l",0,400],["m",100,-400],
+["l",0,400],["m",100,-400],
+["l",0,400],["m",100,-400],
+["l",0,400]]
+</textarea>
+<textarea id='logger' style='width:400px;height:200px;'></textarea>
+<script data-main='main.js' src='require.js'></script>
+</body>

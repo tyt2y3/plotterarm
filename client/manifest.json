@@ -1,0 +1,12 @@
+{
+  "name": "Plotterarm client",
+  "description": "Plotter arm designer and controller",
+  "version": "0.7",
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  },
+  "icons": { "16": "icon/armicon-16.png", "128": "icon/armicon-128.png" },
+  "permissions": ["serial"]
+}
