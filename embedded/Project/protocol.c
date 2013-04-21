@@ -6,9 +6,9 @@ void PROTO_init()
 	SERIAL_init();
 }
 
-void PROTO_send()
+void PROTO_send(u8* buffer)
 {
-	SERIAL_send("signal from STM32");
+	SERIAL_send(buffer);
 }
 
 OPER* PROTO_deserialize(const u8* buffer)
@@ -43,7 +43,9 @@ OPER* PROTO_deserialize(const u8* buffer)
 OPER* PROTO_receive()
 {
 	u8* buffer = SERIAL_receive();
+	if( !buffer) return 0;
 	OPER* inst = PROTO_deserialize(buffer);
+	if( !inst) return 0;
 	SERIAL_freebuffer(buffer);
 	return inst;
 }

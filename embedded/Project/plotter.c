@@ -289,20 +289,25 @@ void PLOTTER_calibrate(PLOTTER* plot, OPER* oper)
 	u8 hbyte = (u8)(oper->x>>8);
 	u8 lbyte = (u8)(oper->x & 0xFF);
 	MOTOR* mo=0;
-	switch (hbyte)
+	switch (lbyte)
 	{
 		case 'b': mo = &(plot->base); break;
 		case 'a': mo = &(plot->axis); break;
 		case 'p': mo = &(plot->pen); break;
 	}
 	if( mo)
-	switch (lbyte)
+	switch (hbyte)
 	{
 		case 'P': mo->max_pulse = oper->y; break;
 		case 'p': mo->min_pulse = oper->y; break;
 		case 'A': mo->max_angle = oper->y; break;
 		case 'a': mo->min_angle = oper->y; break;
+		case 'W': MOTOR_update_pulsewidth(mo, (u16)oper->y); break;
 	}
+	//trigger PLOTTER_signal on next update
+	plot->base.angle=plot->base.to_angle;
+	plot->axis.angle=plot->axis.to_angle;
+	plot->pen.angle=plot->pen.to_angle;
 }
 
 void PLOTTER_operation(PLOTTER* plot, OPER* oper)
@@ -320,7 +325,6 @@ void PLOTTER_operation(PLOTTER* plot, OPER* oper)
 			PLOTTER_operation(plot, &dump);
 			return;
 		}
-		break;
 
 		//move relatively
 		case 'm':
@@ -407,13 +411,15 @@ void PLOTTER_operation(PLOTTER* plot, OPER* oper)
 
 u8 PLOTTER_signal(PLOTTER* plot) //signal that one operation has been finished
 {
+	OPER* oper=&plot->oper[plot->opercurr];
 	if( !plot->subroutine)
 	{
 		plot->opercurr++;
-		switch( plot->oper[plot->opercurr].code)
+		oper=&plot->oper[plot->opercurr];
+		switch( oper->code)
 		{
 			case '~': //calibration
-				PLOTTER_calibrate(plot, &plot->oper[plot->opercurr]);
+				PLOTTER_calibrate(plot, oper);
 			break;
 
 			case '^': //control
@@ -425,19 +431,19 @@ u8 PLOTTER_signal(PLOTTER* plot) //signal that one operation has been finished
 			break;
 
 			default:
-				PLOTTER_operation(plot, &plot->oper[plot->opercurr]); //perform operation
+				PLOTTER_operation(plot, oper); //perform operation
 		}
 	}
 	else
 	{	//an operational step of a subroutine has been finished
-		switch( plot->oper[plot->opercurr].code)
+		switch( oper->code)
 		{
 			case 'C': case 'c':
 				PLOTTER_subroutine_bezier2(plot); //next step of subroutine
 			break;
 		}
 	}
-	return plot->oper[plot->opercurr].code;
+	return oper->code;
 }
 
 u8 PLOTTER_update(PLOTTER* plot)

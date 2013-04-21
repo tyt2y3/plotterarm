@@ -99,8 +99,8 @@ void PWM_timer_config(void)
 	uint16_t CCR4_Val = 1; //lower right pin
 
 	/* Time base configuration */
-	TIM_TimeBaseStructure.TIM_Period = 65530;
-	TIM_TimeBaseStructure.TIM_Prescaler = 10;
+	TIM_TimeBaseStructure.TIM_Period = 65535;
+	TIM_TimeBaseStructure.TIM_Prescaler = 5;
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 

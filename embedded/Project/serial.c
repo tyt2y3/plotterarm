@@ -150,6 +150,6 @@ bool SERIAL_selftest()
 		rxbuffer[i] = (USART_ReceiveData(USARTz) & 0x7F);
 	}
 	LOG(rxbuffer);
-	bool success = (bool)strcmp((char*)buffer,(char*)rxbuffer)==0;
+	bool success = strcmp((char*)buffer,(char*)rxbuffer)==0;
 	return success;
 }

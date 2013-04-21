@@ -3,12 +3,18 @@ requirejs(['protocol'],function(proto)
 
 proto.onreceive=function(received)
 {
-	log(received);
+	log('> '+received);
 }
 $('cmd2').innerHTML='send';
 $('cmd2').onclick=function()
 {
-	var oper = JSON.parse($('sender').value);
+	var oper;
+	try {
+		oper = JSON.parse($('sender').value);
+	} catch (e) {
+		log(e.message);
+		return;
+	}
 	if( oper[oper.length-1][0]!=='Q')
 		oper.push(["^","Q",0]);
 	oper.unshift(["^", "H".charCodeAt(0), oper.length]);

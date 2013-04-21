@@ -27,7 +27,7 @@ define(['states','serial'],function(states)
 				return 'disconnected';
 			}
 		},
-		
+
 		disconnected: //state name
 		{
 			event:
@@ -71,7 +71,7 @@ define(['states','serial'],function(states)
 				connected:'connected' //go to state connected
 			}
 		},
-		
+
 		connected:
 		{
 			event:

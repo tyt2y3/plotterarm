@@ -12,7 +12,7 @@
           
           
           
-        <Column0>221</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+        <Column0>268</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
       </Workspace>
       <Build>
         
@@ -24,7 +24,7 @@
     <Windows>
       
       
-    <Wnd0>
+    <Wnd2>
         <Tabs>
           <Tab>
             <Identity>TabID-25597-10375</Identity>
@@ -32,24 +32,24 @@
             <Factory>Workspace</Factory>
             <Session>
               
-            <NodeDict><ExpandedNode>Project</ExpandedNode><ExpandedNode>Project/Doc</ExpandedNode><ExpandedNode>Project/User</ExpandedNode><ExpandedNode>Project/User/lcd.c</ExpandedNode><ExpandedNode>Project/User/lcd.c/Output</ExpandedNode><ExpandedNode>Project/Utilities</ExpandedNode></NodeDict></Session>
+            <NodeDict><ExpandedNode>Project</ExpandedNode><ExpandedNode>Project/Doc</ExpandedNode><ExpandedNode>Project/StdPeriph_Driver</ExpandedNode><ExpandedNode>Project/User</ExpandedNode><ExpandedNode>Project/Utilities</ExpandedNode></NodeDict></Session>
           </Tab>
         </Tabs>
         
-      <SelectedTab>0</SelectedTab></Wnd0><Wnd1><Tabs><Tab><Identity>TabID-26209-28672</Identity><TabName>Build</TabName><Factory>Build</Factory><Session/></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd1></Windows>
+      <SelectedTab>0</SelectedTab></Wnd2><Wnd3><Tabs><Tab><Identity>TabID-8708-10631</Identity><TabName>Build</TabName><Factory>Build</Factory><Session/></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd3></Windows>
     <Editor>
       
       
       
       
-    <Pane><Tab><Factory>TextEditor</Factory><Filename>C:\Users\user\Documents\elec3300\plotterarm\Project\main.c</Filename><XPos>0</XPos><YPos>6</YPos><SelStart>242</SelStart><SelEnd>242</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\Users\user\Documents\elec3300\plotterarm\Project\motor.h</Filename><XPos>0</XPos><YPos>3</YPos><SelStart>189</SelStart><SelEnd>189</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\Users\user\Documents\elec3300\plotterarm\Project\motor.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>1670</SelStart><SelEnd>1670</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\Users\user\Documents\elec3300\plotterarm\Project\pwm.c</Filename><XPos>0</XPos><YPos>110</YPos><SelStart>363</SelStart><SelEnd>363</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\Users\user\Documents\elec3300\plotterarm\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_tim.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>1075</SelStart><SelEnd>1075</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\Users\user\Documents\elec3300\plotterarm\Libraries\CMSIS\Core\CM3\stm32f10x.h</Filename><XPos>0</XPos><YPos>304</YPos><SelStart>21709</SelStart><SelEnd>21709</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\Users\user\Documents\elec3300\plotterarm\Project\plotter.c</Filename><XPos>0</XPos><YPos>102</YPos><SelStart>2522</SelStart><SelEnd>2522</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\Users\user\Documents\elec3300\plotterarm\Project\data.c</Filename><XPos>0</XPos><YPos>75</YPos><SelStart>2722</SelStart><SelEnd>2722</SelEnd></Tab><ActiveTab>7</ActiveTab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>F:\elec3300-project\plotterarm\embedded\Project\main.c</Filename><XPos>0</XPos><YPos>15</YPos><SelStart>244</SelStart><SelEnd>244</SelEnd></Tab><ActiveTab>0</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>F:\elec3300-project\plotterarm\embedded\Project\plotter.c</Filename><XPos>0</XPos><YPos>113</YPos><SelStart>1969</SelStart><SelEnd>1969</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>F:\elec3300-project\plotterarm\embedded\Project\motor.c</Filename><XPos>0</XPos><YPos>36</YPos><SelStart>1719</SelStart><SelEnd>1719</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>F:\elec3300-project\plotterarm\embedded\Project\pwm.c</Filename><XPos>0</XPos><YPos>96</YPos><SelStart>3269</SelStart><SelEnd>3269</SelEnd></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
     <Positions>
       
       
       
       
       
-    <Top><Row0><Sizes><Toolbar-01c1ed30><key>iaridepm.enu1</key></Toolbar-01c1ed30></Sizes></Row0><Row1><Sizes/></Row1></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>430</Bottom><Right>295</Right><x>-2</x><y>-2</y><xscreen>690</xscreen><yscreen>294</yscreen><sizeHorzCX>505124</sizeHorzCX><sizeHorzCY>432990</sizeHorzCY><sizeVertCX>217423</sizeVertCX><sizeVertCY>636230</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>198</Bottom><Right>1368</Right><x>-2</x><y>-2</y><xscreen>1370</xscreen><yscreen>200</yscreen><sizeHorzCX>1002928</sizeHorzCX><sizeHorzCY>294551</sizeHorzCY><sizeVertCX>146413</sizeVertCX><sizeVertCY>294551</sizeVertCY></Rect></Wnd1></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+    <Top><Row0><Sizes><Toolbar-00693e40><key>iaridepm.enu1</key></Toolbar-00693e40></Sizes></Row0><Row1><Sizes/></Row1></Top><Left><Row0><Sizes><Wnd2><Rect><Top>-2</Top><Left>-2</Left><Bottom>734</Bottom><Right>342</Right><x>-2</x><y>-2</y><xscreen>970</xscreen><yscreen>426</yscreen><sizeHorzCX>505208</sizeHorzCX><sizeHorzCY>433367</sizeHorzCY><sizeVertCX>179167</sizeVertCX><sizeVertCY>748728</sizeVertCY></Rect></Wnd2></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd3><Rect><Top>-2</Top><Left>-2</Left><Bottom>198</Bottom><Right>1922</Right><x>-2</x><y>-2</y><xscreen>1924</xscreen><yscreen>200</yscreen><sizeHorzCX>1002083</sizeHorzCX><sizeHorzCY>203459</sizeHorzCY><sizeVertCX>104167</sizeVertCX><sizeVertCY>203459</sizeVertCY></Rect></Wnd3></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
   </Desktop>
 </Workspace>
 

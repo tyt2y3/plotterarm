@@ -23,9 +23,9 @@ int main(void)
 	LOG_init();
 	PROTO_init();
 
+	PROTO_send("hello from STM32");
 	while (1)
 	{
-		PROTO_send();
 		OPER* inst = PROTO_receive();
 		if( inst)
 		{
@@ -42,8 +42,14 @@ int main(void)
 				if( N%100==0)
 					every100frame();
 			}
+			PROTO_free(inst);
 		}
-		PROTO_free(inst);
+		else
+		{
+			PROTO_send("error: PROTO_receive() returns 0");
+			continue;
+		}
+		PROTO_send("operations finished");
 	}
 }
 
