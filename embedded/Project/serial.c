@@ -116,7 +116,11 @@ u8* SERIAL_receive()
 	u32 len = *((u32*)head);
 	if( !len) return 0;
 	u8* buffer = (u8*)malloc(sizeof(u8)*(len+10));
-	if( !buffer) return 0;
+	if(!buffer) {
+		printf("malloc failed for %d bytes\n",sizeof(u8)*(len+10));
+		printf("  at %s:%d\n",__FILE__,__LINE__);
+		return 0;
+	}
 	SERIAL_receive_str(buffer,len);
 	return buffer;
 }

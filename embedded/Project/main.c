@@ -13,6 +13,8 @@ void every100frame();
 PLOTTER plotobject;
 PLOTTER* plot = &plotobject;
 
+//#define STANDALONE
+
 int main(void)
 {
 	SystemInit();
@@ -23,6 +25,22 @@ int main(void)
 	LOG_init();
 	PROTO_init();
 
+#ifdef STANDALONE
+#include "data.c"
+	plot->oper = drawing;
+	plot->opercurr = 0;
+	for( u32 N=0; ; N++)
+	{
+		if( PLOTTER_update(plot)=='Q')
+			break;
+			everyframe();
+		if( N%10==0)
+			every10frame();
+		if( N%100==0)
+			every100frame();
+	}
+	while (1) {}
+#else
 	PROTO_send("hello from STM32");
 	while (1)
 	{
@@ -33,9 +51,9 @@ int main(void)
 			plot->opercurr = -1;
 			for( u32 N=0; ; N++)
 			{
-				if( PLOTTER_update(plot)=='Q')
+				u8 res = PLOTTER_update(plot);
+				if( res=='Q' || res=='P')
 					break;
-
 					everyframe();
 				if( N%10==0)
 					every10frame();
@@ -46,11 +64,12 @@ int main(void)
 		}
 		else
 		{
-			PROTO_send("error: PROTO_receive() returns 0");
+			PROTO_send("error: PROTO_receive failed");
 			continue;
 		}
 		PROTO_send("operations finished");
 	}
+#endif
 }
 
 void everyframe()

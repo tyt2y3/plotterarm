@@ -1,0 +1,178 @@
+<body>
+<style>
+#container
+{
+	width:600px;
+}
+#inner_drop
+{
+	border: 2px dashed #bbb;
+	height: 100px;
+	text-align: center;
+	line-height: 100px;
+	font-size: 20px;
+}
+#outer_drop
+{
+	border: 1px solid #bbb;
+	padding:10px;
+}
+#preview
+{
+	border: 1px solid #bbb;
+	height: 600px;
+}
+</style>
+<div id='container'>
+	<div id='outer_drop'>
+		<div id='inner_drop'>
+			Drop files here
+			<input type='file' id='fileselect'/>
+		</div>
+	</div>
+	<div id='preview'></div>
+	<div id='stdout'></div>
+</div>
+
+<script src='path_parser.js'></script>
+<script src='svg_panzoom.js'></script>
+<script>
+var SampleHandler=
+{
+	show: function(name, params) {
+		params = Array.prototype.slice.call(params);
+		$('stdout').innerHTML+= name+"("+params.join(",")+")"+'<br>';
+	},
+	arcAbs: function(rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y) {
+		this.show("arcAbs", arguments);
+	},
+	arcRel: function(rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y) {
+		this.show("arcRel", arguments);
+	},
+	curvetoCubicAbs: function(x1, y1, x2, y2, x, y) {
+		this.show("curvetoCubicAbs", arguments);
+	},
+	curvetoCubicRel: function(x1, y1, x2, y2, x, y) {
+		this.show("curvetoCubicRel", arguments);
+	},
+	linetoHorizontalAbs: function(x) {
+		this.show("linetoHorizontalAbs", arguments);
+	},
+	linetoHorizontalRel: function(x) {
+		this.show("linetoHorizontalRel", arguments);
+	},
+	linetoAbs: function(x, y) {
+		this.show("linetoAbs", arguments);
+	},
+	linetoRel: function(x, y) {
+		this.show("linetoRel", arguments);
+	},
+	movetoAbs: function(x, y) {
+		this.show("movetoAbs", arguments);
+	},
+	movetoRel: function(x, y) {
+		this.show("movetoRel", arguments);
+	},
+	curvetoQuadraticAbs: function(x1, y1, x, y) {
+		this.show("curvetoQuadraticAbs", arguments);
+	},
+	curvetoQuadraticRel: function(x1, y1, x, y) {
+		this.show("curvetoQuadraticRel", arguments);
+	},
+	curvetoCubicSmoothAbs: function(x2, y2, x, y) {
+		this.show("curvetoCubicSmoothAbs", arguments);
+	},
+	curvetoCubicSmoothRel: function(x2, y2, x, y) {
+		this.show("curvetoCubicSmoothRel", arguments);
+	},
+	curvetoQuadraticSmoothAbs: function(x, y) {
+		this.show("curvetoQuadraticSmoothAbs", arguments);
+	},
+	curvetoQuadraticSmoothRel: function(x, y) {
+		this.show("curvetoQuadraticSmoothRel", arguments);
+	},
+	linetoVerticalAbs: function(y) {
+		this.show("linetoVerticalAbs", arguments);
+	},
+	linetoVerticalRel: function(y) {
+		this.show("linetoVerticalRel", arguments);
+	},
+	closePath: function() {
+		this.show("closePath", arguments);
+	}
+}
+function coord_trans(x,y)
+{
+	var pos = doc.createSVGPoint();
+	pos.x = x;
+	pos.y = y;
+	var ctm = doc.getScreenCTM();
+	pos = pos.matrixTransform(ctm);
+	return pos;
+}
+function process_svg(svg)
+{
+	svg_panzoom(svg);
+	var parser = new PathParser();
+	parser.setHandler(SampleHandler);
+	var paths = svg.getElementsByTagName('path');
+	if( paths)
+	for( var i=0; i<paths.length; i++)
+	{
+		parser.parseData(paths[i].getAttribute('d'));
+	}
+}
+function load_svg(file)
+{
+	var reader = new FileReader();
+	reader.onload = function(e)
+	{
+		var txt = e.target.result;
+		txt = txt.slice(txt.indexOf('<svg'));
+		$('preview').innerHTML = txt;
+		process_svg($('preview').firstChild);
+	}
+	reader.readAsText(file);
+}
+function handleFile(files)
+{
+	load_svg(files[0]);
+}
+function handleFileSelect(e)
+{
+	var files = e.target.files; // FileList object
+	handleFile(files);
+}
+function handleFileDrop(e)
+{
+	e.stopPropagation();
+	e.preventDefault();
+	var files = e.dataTransfer.files; // FileList object.
+	handleFile(files);
+}
+function handleDragOver(e)
+{
+	e.stopPropagation();
+	e.preventDefault();
+	e.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+}
+function handleEmptyDrop(e)
+{
+	e.stopPropagation();
+	e.preventDefault();
+	e.dataTransfer.dropEffect = 'none';
+}
+function $(id)
+{
+	return document.getElementById(id);
+}
+
+$('fileselect').addEventListener('change', handleFileSelect, false);
+var dropzone = $('inner_drop');
+dropzone.addEventListener('dragover', handleDragOver, false);
+dropzone.addEventListener('drop', handleFileDrop, false);
+var body = document.getElementsByTagName('body')[0];
+body.addEventListener('dragover', handleEmptyDrop, false);
+body.addEventListener('drop', handleEmptyDrop, false);
+</script>
+</body>

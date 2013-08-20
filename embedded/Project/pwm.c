@@ -100,7 +100,7 @@ void PWM_timer_config(void)
 
 	/* Time base configuration */
 	TIM_TimeBaseStructure.TIM_Period = 65535;
-	TIM_TimeBaseStructure.TIM_Prescaler = 5;
+	TIM_TimeBaseStructure.TIM_Prescaler = 5; //10 for 50Hz, 5 for 100Hz
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 

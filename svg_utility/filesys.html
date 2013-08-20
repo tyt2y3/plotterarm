@@ -1,0 +1,72 @@
+<body>
+<style>
+#inner_drop
+{
+	border: 2px dashed #bbb;
+	height: 100px;
+	text-align: center;
+	line-height: 100px;
+	font-size: 20px;
+}
+#outer_drop
+{
+	width: 600px;
+	border: 1px solid #bbb;
+	padding:10px;
+}
+</style>
+<div id="outer_drop">
+	<div id="inner_drop">
+		Drop files here
+		<input type="file" id="fileselect"/>
+	</div>
+</div>
+<output id="list"></output>
+
+<script>
+function handleFile(files)
+{
+	// files is a FileList of File objects. List some properties.
+	var output = [];
+	for (var i = 0, f; f = files[i]; i++) {
+		output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+			f.size, ' bytes, last modified: ',
+			f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+			'</li>');
+	}
+	document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+}
+function handleFileSelect(e)
+{
+	var files = e.target.files; // FileList object
+	handleFile(files);
+}
+function handleFileDrop(e)
+{
+	e.stopPropagation();
+	e.preventDefault();
+	var files = e.dataTransfer.files; // FileList object.
+	handleFile(files);
+}
+function handleDragOver(e)
+{
+	e.stopPropagation();
+	e.preventDefault();
+	e.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+}
+function handleEmptyDrop(e)
+{
+	e.stopPropagation();
+	e.preventDefault();
+	e.dataTransfer.dropEffect = 'none';
+}
+
+document.getElementById('fileselect').addEventListener('change', handleFileSelect, false);
+var dropzone = document.getElementById('inner_drop');
+dropzone.addEventListener('dragover', handleDragOver, false);
+dropzone.addEventListener('drop', handleFileDrop, false);
+var body = document.getElementsByTagName('body')[0];
+body.addEventListener('dragover', handleEmptyDrop, false);
+body.addEventListener('drop', handleEmptyDrop, false);
+</script>
+</body>

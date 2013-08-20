@@ -1,0 +1,106 @@
+<html>
+<body>
+<div id="stdout" style="font-size:20px;"></div>
+<svg onload="init(evt)" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<path id="p1" d="M40,70 q10,80 50,20 t45,40 l25,-60 c20,110 120,-15 120,70 s120,-30 10,-40" stroke="blue" stroke-width="5" fill="none"/>
+</svg>
+<script src='path_parser.js'></script>
+<script>
+var SampleHandler=
+{
+	show: function(name, params) {
+		var result = [];
+		var args = [];
+		for (var i = 0; i < params.length; i++ )
+			args[i] = params[i];
+		result.push(name);
+		result.push("(");
+		result.push(args.join(","));
+		result.push(")");
+		println(result.join(""));
+	},
+	arcAbs: function(rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y) {
+		this.show("arcAbs", arguments);
+	},
+	arcRel: function(rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y) {
+		this.show("arcRel", arguments);
+	},
+	curvetoCubicAbs: function(x1, y1, x2, y2, x, y) {
+		this.show("curvetoCubicAbs", arguments);
+	},
+	curvetoCubicRel: function(x1, y1, x2, y2, x, y) {
+		this.show("curvetoCubicRel", arguments);
+	},
+	linetoHorizontalAbs: function(x) {
+		this.show("linetoHorizontalAbs", arguments);
+	},
+	linetoHorizontalRel: function(x) {
+		this.show("linetoHorizontalRel", arguments);
+	},
+	linetoAbs: function(x, y) {
+		this.show("linetoAbs", arguments);
+	},
+	linetoRel: function(x, y) {
+		this.show("linetoRel", arguments);
+	},
+	movetoAbs: function(x, y) {
+		this.show("movetoAbs", arguments);
+	},
+	movetoRel: function(x, y) {
+		this.show("movetoRel", arguments);
+	},
+	curvetoQuadraticAbs: function(x1, y1, x, y) {
+		this.show("curvetoQuadraticAbs", arguments);
+	},
+	curvetoQuadraticRel: function(x1, y1, x, y) {
+		this.show("curvetoQuadraticRel", arguments);
+	},
+	curvetoCubicSmoothAbs: function(x2, y2, x, y) {
+		this.show("curvetoCubicSmoothAbs", arguments);
+	},
+	curvetoCubicSmoothRel: function(x2, y2, x, y) {
+		this.show("curvetoCubicSmoothRel", arguments);
+	},
+	curvetoQuadraticSmoothAbs: function(x, y) {
+		this.show("curvetoQuadraticSmoothAbs", arguments);
+	},
+	curvetoQuadraticSmoothRel: function(x, y) {
+		this.show("curvetoQuadraticSmoothRel", arguments);
+	},
+	linetoVerticalAbs: function(y) {
+		this.show("linetoVerticalAbs", arguments);
+	},
+	linetoVerticalRel: function(y) {
+		this.show("linetoVerticalRel", arguments);
+	},
+	closePath: function() {
+		this.show("closePath", arguments);
+	}
+}
+var stdout;
+var parser = new PathParser();
+
+function init(e) {
+	if( typeof svgDocument==='undefined')
+	svgDocument = e.target.ownerDocument;
+
+	stdout = document.getElementById("stdout");
+
+	parser.setHandler(SampleHandler);
+	parse("p1");
+}
+
+function parse(id) {
+	var source = svgDocument.getElementById(id);
+	var pathData = source.getAttributeNS(null, "d");
+
+	println("Parsing: " + pathData);
+	parser.parseData(pathData);
+}
+
+function println(msg) {
+	stdout.innerHTML+=msg+'<br>';
+}
+</script>
+</body>
+</html>

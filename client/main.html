@@ -1,28 +1,102 @@
 <!DOCTYPE html>
 <head>
+<style>
+#navbar button
+{
+	width:49%;
+}
+.page
+{
+	width:98%;
+	height:90%;
+}
+.halfpage
+{
+	width:100%;
+	height:48%;
+}
+textarea
+{
+	resize:none;
+	font-family:"Liberation Mono",monospace;
+	font-size:16px;
+	color:#FFF;
+	background:#555;
+}
+body
+{
+	border:1px solid black;
+	background:#EEE;
+	position:absolute;
+	left:0;
+	top:0;
+	right:0;
+	bottom:0;
+}
+#svg_outer {
+   position: relative;
+   width: 100%;
+   height: 0;
+   padding-top: 70.707070707%;
+}
+#svg_inner {
+   position: absolute;
+   top: 0;
+   right: 0;
+   bottom: 0;
+   left: 0;
+   background:#FFF;
+}
+#svg_inner div {
+   position: absolute;
+   top: 0;
+   right: 0;
+   bottom: 0;
+   left: 0;
+}
+</style>
 </head>
 <body>
-<button id='cmd1'></button>
-<input id='param1' value='COM4'></input>
-<button id='cmd2'></button>
-<br>
-<textarea id='sender' style='width:400px;height:200px;'>
-[["~","bP",12000],["~","bp",0],["~","bA",18000],["~","ba",0],["A",17000,0],["A",18000,0]]
-</textarea>
-<!--
-[["M",2000,0],
-["l",400,0],["m",-400,100],
-["l",400,0],["m",-400,100],
-["l",400,0],["m",-400,100],
-["l",100,0],["l",100,0],["l",100,0],["l",100,0],["m",-400,100],
-["l",100,0],["l",100,0],["l",100,0],["l",100,0],
-["m",-400,-400],
-["l",0,400],["m",100,-400],
-["l",0,400],["m",100,-400],
-["l",0,400],["m",100,-400],
-["l",0,400],["m",100,-400],
-["l",0,400]]
--->
-<textarea id='logger' style='width:400px;height:200px;'></textarea>
+<div id='navbar'>
+	<button>console</button>
+	<button>svg printer</button>
+</div>
+<div id='page0' class='page'>
+	<div class='toolbar'>
+		<button id='cmd1'></button>
+		<input id='param1' value='COM4'></input>
+		<button id='cmd2'></button>
+	</div>
+	<textarea id='sender' class='halfpage'></textarea>
+	<textarea id='logger' class='halfpage'></textarea>
+</div>
+<div id='page1' class='page' default>
+	<div class='toolbar'>
+		<button id='svg_print'>Print</button>
+		Drop svg here <input type='file' id='fileselect'/>
+	</div>
+	<div id='svg_outer'>
+		<div id='svg_inner'>
+			<div id='svg_inner_0'>
+				<svg id='svg_ref' viewBox='-10 393.0508474576271 2970 2063.898305084746'>
+					<g transform='translate(2650) rotate(90)'>
+						<rect id='paperA4' x="420" y="-300" width="2050" height="2950"
+							style="stroke:#AAA;stroke-width:5;fill:none;"/>
+						<path id='effective_area'
+							transform='translate(80,0)'
+							fill-rule='nonzero' fill='#CCC' stroke='none' d='
+						M1100,-500 L2150,-500 2400,-200 2400,1500
+						Q2000,2600 1000,3000 L0,3000
+						L0,1500 300,1000
+						Q1000,800 1100,-500
+						M-100,-600 L-100,3100 L2700,3100, L2700,-600 -100,-600
+						' />
+					</g>
+				</svg>
+			</div>
+			<div id='svg_inner_1'></div>
+		</div>
+	</div>
+</div>
 <script data-main='main.js' src='require.js'></script>
 </body>

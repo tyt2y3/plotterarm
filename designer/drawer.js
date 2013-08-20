@@ -14,6 +14,11 @@ function drawer()
 		if ( C==null) {C=4;}
 		T.linestring[C] += " L "+P.x+","+P.y;
 	}
+	T.quadraticCurveTo=function(P1,P2,C)
+	{
+		if ( C==null) {C=4;}
+		T.linestring[C] += " Q "+P1.x+","+P1.y+" "+P2.x+","+P2.y;
+	}
 	T.drawpoint=function(P,s,C)
 	{
 		if (!s) {s=2;}

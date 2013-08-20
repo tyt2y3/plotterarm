@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+<path fill='none' stroke='black' stroke-width='1' d='
+ M454,195 Q418,197 367,181
+ Q281,160 267,220
+ M322,212 Q296,208 267,220
+ M322,212 L313,310
+ Q273,348 315,349
+ Q342,344 344,310
+ L351,217
+ M392,219 L351,217
+ M392,219 Q375,350 428,350
+ Q462,348 464,316
+ M416,220 Q407,353 464,316
+ M416,220 Q455,228 454,195
+'/>
+</svg>

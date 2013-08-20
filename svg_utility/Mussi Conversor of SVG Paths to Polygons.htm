@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="content-type"
+	content="application/xhtml+xml; charset=utf-8" />
+<title>Mussi Conversor of SVG Paths to Polygons</title>
+<script type="text/javascript"
+	src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+</head>
+<body>
+	<div id="outer">
+		<h1>SVG Conversor: Paths to Polygons</h1>
+		<i>Please use the field below to select an SVG file from your computer.</i>
+		<br>
+		<input type="file" id="files" name="files[]" />
+		<output id="list"></output>
+		<div id="loading"></div>
+		<div id="le_svg" style="display: none;"></div>
+	</div>
+	<script>
+//http://whaticode.com/tag/svg/	
+	function copySource() {
+		window.prompt ("Copy to clipboard: Ctrl+C, Enter", document.getElementById("le_svg").innerHTML);
+	}
+  function startConversion() {
+	  $("path").each(function(i){
+		  var path = this;
+			  var len = path.getTotalLength();
+			  var p=path.getPointAtLength(0);
+			  stp=p.x+","+p.y
+			  for(var i=1; i<len; i++){
+				  p=path.getPointAtLength(i);
+				  stp=stp+" "+p.x+","+p.y;
+			  }
+			  $(path).replaceWith('<polygon fill="#FFFFFF" stroke="#000000" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="' +  stp+ '" />');
+
+		});
+		
+		$("#le_svg").html(document.getElementById("le_svg").innerHTML);
+		 document.getElementById("loading").innerHTML = '<b>File converted <a href="javascript:copySource();">Copy the source code</a></b>';
+  }
+  
+  function convert() {
+	  document.getElementById("loading").innerHTML = '<b>Converting file, please wait...</b>';
+	
+	  setTimeout('startConversion()', 500);
+  }
+  
+  function handleFileSelect(evt) {
+    var files = evt.target.files;
+	
+    if (files.length == 0){
+    	return;
+    }
+    
+    var f = files[0];
+    
+   	if (f.type != "image/svg+xml"){
+   		return;
+   	}
+   	
+   	var reader = new FileReader();
+   	reader.onload = (function(theFile) {
+        return function(e) {
+    		document.getElementById("loading").innerHTML = '<b>Selected file displayed below. <a href="javascript:convert();">Click here to start converting the paths</a></b>';
+    		
+    		document.getElementById("le_svg").innerHTML = e.target.result;
+    		
+    		$("#le_svg").show();
+         };
+      })(f);
+    reader.readAsText(f);
+    
+  }
+
+  var calc = function(index){
+	  var path = paths[index];
+	  var len = path.getTotalLength();
+	  var p=path.getPointAtLength(0);
+	  stp=p.x+","+p.y
+	  for(var i=1; i<len; i++){
+		  p=path.getPointAtLength(i);
+		  stp=stp+" "+p.x+","+p.y;
+	  }
+	  $(path).replaceWith('<polyline fill="#FFFFFF" stroke="#000000" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="' +  stp+ '" />');
+  }
+  
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+</script>
+</body>
+</html>

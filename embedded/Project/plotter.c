@@ -4,7 +4,7 @@
 
 typedef struct
 {
-	u8 code; //operation code
+	u16 code; //operation code
 	s16 x; //parameter 1
 	s16 y; //parameter 2
 }	OPER; //a plotterarm operation
@@ -25,19 +25,16 @@ typedef struct
 	u16 pendownspeed;
 	u16 baselength;
 	u16 axislength;
-	u16 meanspeed; //the speed of the slower arm
+	float meanspeed; //the speed of the slower arm
 	u16 maxspeed; //the max speed of the faster arm, or the speed when pen is up
 	s16 X; //current pen position
 	s16 Y;
-	s16 AX; //base point of bezier2
-	s16 AY;
-	s16 BX; //control point of bezier2
-	s16 BY;
-	s16 CX; //third point of bezier2
-	s16 CY;
+	s16 BX[4]; //bezier points
+	s16 BY[4];
+	u16 num_points; //number of bezier points
 	bool subroutine; //indicate whether the plotter is in a subroutine, i.e. drawing a bezier curve
 	u16 register1; //registers for use in subroutine
-	u16 register2; //
+	u16 register2;
 	OPER* oper; //operation array
 	s16 opercurr; //operation i
 }	PLOTTER;
@@ -69,10 +66,10 @@ void PLOTTER_init(PLOTTER* plot)
 		{
 			.timer = TIM3,
 			.channel = 1,
-			.max_angle =  13800,
-			.min_angle = -10600,
-			.max_pulse = 8000,
-			.min_pulse = 1,
+			.max_angle =  5850,
+			.min_angle = -6600,
+			.max_pulse = 12500,
+			.min_pulse = 5000,
 			.angle = 4499,
 			.to_angle = 4500,
 			.angle_speed = 1,
@@ -84,10 +81,10 @@ void PLOTTER_init(PLOTTER* plot)
 		{
 			.timer = TIM3,
 			.channel = 2,
-			.max_angle = 15360,
-			.min_angle = -10040,
-			.max_pulse = 8000,
-			.min_pulse = 1,
+			.max_angle = 14100,
+			.min_angle = 0,
+			.max_pulse = 13000,
+			.min_pulse = 4500,
 			.angle = 4499,
 			.to_angle = 4500,
 			.angle_speed = 1,
@@ -99,33 +96,30 @@ void PLOTTER_init(PLOTTER* plot)
 		{
 			.timer = TIM3,
 			.channel = 3,
-			.max_angle = 9550,
-			.min_angle = -15100,
-			.max_pulse = 8000,
-			.min_pulse = 1,
-			.angle = -2999,
-			.to_angle = -3000,
+			.max_angle = 19000,
+			.min_angle = -1300,
+			.max_pulse = 15000,
+			.min_pulse = 3000,
+			.angle = 4499,
+			.to_angle = 4500,
 			.angle_speed = 1,
 			.angle_speed_dp1 = 0,
 			.angle_speed_dp2 = 0,
 			.counter = 1
 		},
-		.penupangle = -1400,
-		.penupspeed = 500,
-		.pendownangle = -300,
-		.pendownspeed = 25,
+		.penupangle = 6800,
+		.penupspeed = 10,
+		.pendownangle = 7800,
+		.pendownspeed = 10,
 		.baselength = 1400,
-		.axislength = 1590,
-		.meanspeed = 1,
-		.maxspeed = 4,
+		.axislength = 1650,
+		.meanspeed = 0.8f,
+		.maxspeed = 3,
 		.X = 2000,
 		.Y = 0,
-		.AX = 0,
-		.AY = 0,
-		.BX = 0,
-		.BY = 0,
-		.CX = 0,
-		.CY = 0,
+		.BX = {0},
+		.BY = {0},
+		.num_points = 0,
 		.subroutine = FALSE,
 		.register1 = 0,
 		.register2 = 0,
@@ -156,7 +150,7 @@ void PLOTTER_testmotor(MOTOR* motor)
 
 float PLOTTER_cosine(s16 a, s16 b, s16 c)
 {
-	float ratio = (float)(a*a+b*b-c*c)/(float)(2*a*b);
+	float ratio = (float)(a*a+b*b-c*c)/(2*a*b);
 	//printf( "a=%d, b=%d, c=%d, ratio=%f, acos=%f\n", a,b,c,ratio,acos(ratio));
 	if( ratio>1.0f || ratio<-1.0f)
 	{
@@ -173,52 +167,64 @@ float PLOTTER_cosine(s16 a, s16 b, s16 c)
 
 void PLOTTER_turn(PLOTTER* plot, s16 b_toangle, s16 a_toangle, bool fast)
 {
+	s16 a_div = a_toangle - plot->axis.angle;
+	a_div = a_div>0 ? a_div : -a_div;
+	s16 b_div = b_toangle - plot->base.angle;
+	b_div = b_div>0 ? b_div : -b_div;
 	if( fast)
 	{
-		MOTOR_toangle( &plot->axis, a_toangle, plot->maxspeed, 0, 0);
-		MOTOR_toangle( &plot->base, b_toangle, plot->maxspeed, 0, 0);
+		u16 mul=1;
+		if( a_div>2000 && b_div>2000)
+			mul=3;
+		MOTOR_toangle( &plot->axis, a_toangle, plot->maxspeed*mul, 0, 0);
+		MOTOR_toangle( &plot->base, b_toangle, plot->maxspeed*mul, 0, 0);
 	}
 	else
 	{
-		s16 a_div = a_toangle - plot->axis.angle;
-		a_div = a_div>0 ? a_div : -a_div;
-		s16 b_div = b_toangle - plot->base.angle;
-		b_div = b_div>0 ? b_div : -b_div;
-
-		u16 speed, speed_dp1, speed_dp2;
-		u16 lowspeed = plot->meanspeed;
 		float ratio;
-
 		if( a_div < b_div)
 		{
 			if( a_div==0)
 				a_div=1;
-			ratio = (float)b_div/(float)a_div;
+			ratio = (float)b_div/a_div;
 		}
 		else
 		{
 			if( b_div==0)
 				b_div=1;
-			ratio = (float)a_div/(float)b_div;
+			ratio = (float)a_div/b_div;
 		}
 
-		float fspeed = (float)lowspeed * ratio;
-		speed = (u16)fspeed;
-		speed_dp1 = ((u16)(fspeed*10.0f))%10;
-		speed_dp2 = ((u16)(fspeed*100.0f))%10;
-		if( speed > plot->maxspeed)
-			speed = plot->maxspeed;
+		u16 lspeed_dp0, lspeed_dp1, lspeed_dp2;
+		u16 hspeed_dp0, hspeed_dp1, hspeed_dp2;
+		{
+			float lspeed = plot->meanspeed;
+			float hspeed = lspeed * ratio;
+			if( hspeed > plot->maxspeed)
+			{
+				hspeed = plot->maxspeed;
+				lspeed = hspeed / ratio;
+			}
+			if( lspeed < 0.01f)
+			  	lspeed = 0.01f;
+			hspeed_dp0 =  (u16) hspeed;
+			hspeed_dp1 = ((u16)(hspeed*10.0f))%10;
+			hspeed_dp2 = ((u16)(hspeed*100.0f))%10;
+			lspeed_dp0 =  (u16) lspeed;
+			lspeed_dp1 = ((u16)(lspeed*10.0f))%10;
+			lspeed_dp2 = ((u16)(lspeed*100.0f))%10;
+		}
 
 		if( a_div < b_div)
 		{
-			MOTOR_toangle( &plot->axis, a_toangle, lowspeed, 0, 0);
-			MOTOR_toangle( &plot->base, b_toangle, speed, speed_dp1, speed_dp2);
+			MOTOR_toangle( &plot->axis, a_toangle, lspeed_dp0, lspeed_dp1, lspeed_dp2);
+			MOTOR_toangle( &plot->base, b_toangle, hspeed_dp0, hspeed_dp1, hspeed_dp2);
 			//printf( "a_div=%d, b_div=%d, speed axis=%d, speed base=%d.%d%d\n", a_div, b_div, lowspeed, speed, speed_dp1, speed_dp2);
 		}
 		else
 		{
-			MOTOR_toangle( &plot->axis, a_toangle, speed, speed_dp1, speed_dp2);
-			MOTOR_toangle( &plot->base, b_toangle, lowspeed, 0, 0);
+			MOTOR_toangle( &plot->axis, a_toangle, hspeed_dp0, hspeed_dp1, hspeed_dp2);
+			MOTOR_toangle( &plot->base, b_toangle, lspeed_dp0, lspeed_dp1, lspeed_dp2);
 			//printf( "a_div=%d, b_div=%d, speed axis=%d.%d%d, speed base=%d\n", a_div, b_div, speed, speed_dp1, speed_dp2, lowspeed);
 		}
 	}
@@ -231,17 +237,59 @@ void PLOTTER_move(PLOTTER* plot, s16 x, s16 y, bool fast) //move to an absolute 
 	u16 length = (u16)sqrt(x*x + y*y);
 	float the1 = PLOTTER_cosine( length, plot->baselength, plot->axislength);
 	float the2 = PLOTTER_cosine( plot->axislength, plot->baselength, length);
-	float the3 = atan( (float)y/(float)x );
-	//printf( "y=%d, x=%d, ratio=%f, atan=%f\n", y,x,(float)y/(float)x, the3);
-	float beta = PI/2 - the3 - the1;
+	float the3 = atan( (float)y/x );
+	//printf( "y=%d, x=%d, ratio=%f, atan=%f\n", y,x,(float)y/x, the3);
+	float beta;
+	if( x>=0)
+		beta = PI/2 - the3 - the1;
+	else
+		beta = -the3 - PI/2 - the1;
 	float alpha = PI - the2;
 	//printf( "the1=%f, the2=%f, the3=%f, beta=%f, alpha=%f\n",the1,the2,the3,beta,alpha);
 
 	s16 a_toangle = (s16)(alpha/PI*18000);
 	s16 b_toangle = (s16)(beta/PI*18000);
 	//printf( "alpha=%f, a=%d, beta=%f, b=%d\n",alpha,a_toangle,beta,b_toangle);
+	if( a_toangle > plot->axis.max_angle ||
+		b_toangle > plot->base.max_angle ||
+		a_toangle < plot->axis.min_angle ||
+		b_toangle < plot->base.min_angle )
+		x = y;
 
 	PLOTTER_turn(plot, b_toangle, a_toangle, fast);
+}
+
+void PLOTTER_penupdown(PLOTTER* plot, u8 down)
+{
+	//choose the faster motor
+	MOTOR* mo;
+	if( plot->base.angle_speed > plot->axis.angle_speed)
+		mo=&plot->base;
+	else if( plot->base.angle_speed_dp1 > plot->axis.angle_speed_dp1)
+		mo=&plot->base;
+	else if( plot->base.angle_speed_dp2 > plot->axis.angle_speed_dp2)
+		mo=&plot->base;
+	else
+		mo=&plot->base;
+
+	u16 tdiff;
+	{
+		float mspeed = mo->angle_speed + (mo->angle_speed_dp1)*0.1f + (mo->angle_speed_dp2)*0.01f;
+		s16 m_div = mo->angle - mo->to_angle;
+		m_div = m_div>0 ? m_div : -m_div;
+		tdiff = (u16) (m_div/mspeed+0.5f);
+	}
+	u16 pspeed_dp0, pspeed_dp1, pspeed_dp2;
+	{
+		float pspeed = (float)(plot->pendownangle-plot->penupangle)/tdiff;
+		pspeed_dp0 =  (u16) pspeed;
+		pspeed_dp1 = ((u16)(pspeed*10.0f))%10;
+		pspeed_dp2 = ((u16)(pspeed*100.0f))%10;
+	}
+	if( down)
+		MOTOR_toangle( &plot->pen, plot->pendownangle, pspeed_dp0, pspeed_dp1, pspeed_dp2);
+	else
+		MOTOR_toangle( &plot->pen, plot->penupangle, pspeed_dp0, pspeed_dp1, pspeed_dp2);
 }
 
 void PLOTTER_pendown(PLOTTER* plot)
@@ -266,21 +314,38 @@ s16 PLOTTER_getstep(s16 x1, s16 x2, u16 stepcount, u16 numofsteps)
 
 void PLOTTER_operation(PLOTTER* plot, OPER* oper); //declare
 
-void PLOTTER_subroutine_bezier2(PLOTTER* plot)
+void PLOTTER_subroutine_bezier(PLOTTER* plot)
 {
 	if( plot->register1 < plot->register2)
 	{
-		s16 x = PLOTTER_getstep(PLOTTER_getstep(plot->AX, plot->BX, plot->register1, plot->register2), PLOTTER_getstep(plot->BX, plot->CX, plot->register1, plot->register2), plot->register1, plot->register2);
-		s16 y = PLOTTER_getstep(PLOTTER_getstep(plot->AY, plot->BY, plot->register1, plot->register2), PLOTTER_getstep(plot->BY, plot->CY, plot->register1, plot->register2), plot->register1, plot->register2);
+		#define STEP(X1,X2) PLOTTER_getstep(X1, X2, plot->register1, plot->register2)
+		#define STEPBX(i,j) PLOTTER_getstep(plot->BX[i], plot->BX[j], plot->register1, plot->register2)
+		#define STEPBY(i,j) PLOTTER_getstep(plot->BY[i], plot->BY[j], plot->register1, plot->register2)
+		s16 x,y;
+		if( plot->num_points == 3)
+		{	//quadratic
+			x = STEP(STEPBX(0,1),STEPBX(1,2));
+			y = STEP(STEPBY(0,1),STEPBY(1,2));
+		}
+		else if( plot->num_points == 4)
+		{	//cubic
+			x = STEP(STEP(STEPBX(0,1),STEPBX(1,2)),STEP(STEPBX(1,2),STEPBX(2,3)));
+			y = STEP(STEP(STEPBY(0,1),STEPBY(1,2)),STEP(STEPBY(1,2),STEPBY(2,3)));
+		}
 		OPER oper={'L',x,y};
+		printf("(%d,%d) ",x,y);
 		PLOTTER_operation(plot, &oper);
 		plot->register1++;
+		#undef STEP
+		#undef STEPBX
+		#undef STEPBY
 	}
 	else
 	{
-		OPER oper={'L',plot->CX,plot->CY};
+		OPER oper={'L',plot->BX[plot->num_points-1],plot->BY[plot->num_points-1]};
 		PLOTTER_operation(plot, &oper);
 		plot->subroutine = FALSE;
+		plot->num_points = 0;
 	}
 }
 
@@ -303,6 +368,15 @@ void PLOTTER_calibrate(PLOTTER* plot, OPER* oper)
 		case 'A': mo->max_angle = oper->y; break;
 		case 'a': mo->min_angle = oper->y; break;
 		case 'W': MOTOR_update_pulsewidth(mo, (u16)oper->y); break;
+		case 'R': MOTOR_toangle( mo, oper->y, 20000, 0, 0); MOTOR_update(mo); break;
+		case 'L':
+			if(lbyte=='b') plot->baselength = oper->y;
+			if(lbyte=='a') plot->axislength = oper->y;
+		break;
+		case 'D': if(lbyte=='p') plot->pendownangle = oper->y; break;
+		case 'd': if(lbyte=='p') plot->penupangle = oper->y; break;
+		case 'S': if(lbyte=='p') plot->pendownspeed = oper->y; break;
+		case 's': if(lbyte=='p') plot->penupspeed = oper->y; break;
 	}
 	//trigger PLOTTER_signal on next update
 	plot->base.angle=plot->base.to_angle;
@@ -333,12 +407,11 @@ void PLOTTER_operation(PLOTTER* plot, OPER* oper)
 
 		case 'l':
 		{
-			s16 ext; //bad hack, extends over where it is supposed to end
+			s16 ext;
 			if( !plot->subroutine)
-				ext = 30;
+				ext=20; //extends over where it is supposed to end
 			else
-				ext = 20;
-
+				ext=10;
 			s16 holdX = plot->X+oper->x;
 			s16 holdY = plot->Y+oper->y;
 			s16 len = (s16)sqrt(oper->x*oper->x + oper->y*oper->y);
@@ -357,42 +430,69 @@ void PLOTTER_operation(PLOTTER* plot, OPER* oper)
 		PLOTTER_turn(plot, plot->base.angle+oper->x, plot->axis.angle+oper->y, FALSE);
 		break;
 
-		//the second point of bezier
+		//the control points of bezier
 		case 'B':
-		plot->AX = plot->X;
-		plot->AY = plot->Y;
-		plot->BX = oper->x;
-		plot->BY = oper->y;
+		if( plot->num_points == 0)
+		{
+			plot->BX[0] = plot->X;
+			plot->BY[0] = plot->Y;
+			plot->BX[1] = oper->x;
+			plot->BY[1] = oper->y;
+			plot->num_points=2;
+		}
+		else if( plot->num_points == 2)
+		{
+			plot->BX[2] = oper->x;
+			plot->BY[2] = oper->y;
+			plot->num_points=3;
+		}
 		break;
 		case 'b':
-		plot->AX = plot->X;
-		plot->AY = plot->Y;
-		plot->BX = plot->X + oper->x;
-		plot->BY = plot->Y + oper->y;
+		if( plot->num_points == 0)
+		{
+			plot->BX[0] = plot->X;
+			plot->BY[0] = plot->Y;
+			plot->BX[1] = plot->X + oper->x;
+			plot->BY[1] = plot->Y + oper->y;
+			plot->num_points=2;
+		}
+		else if( plot->num_points == 2)
+		{
+			plot->BX[2] = plot->X + oper->x;
+			plot->BY[2] = plot->Y + oper->y;
+			plot->num_points=3;
+		}
 		break;
 
-		//draw a bezier curve!
+		//draw a bezier
 		case 'C': case 'c':
-		if( oper->code=='C')
 		{
-			plot->CX = oper->x;
-			plot->CY = oper->y;
-		}
-		else
-		{
-			plot->CX = plot->X + oper->x;
-			plot->CY = plot->Y + oper->y;
-		}
-		{
+			#define DISTANCE(i,j) ((u16)sqrt((plot->BX[i]-plot->BX[j])*(plot->BX[i]-plot->BX[j])+(plot->BY[i]-plot->BY[j])*(plot->BY[i]-plot->BY[j])))
 			const u16 minlength = 50;
-			u16 dist = (u16)sqrt((plot->X-plot->CX)*(plot->X-plot->CX) + (plot->Y-plot->CY)*(plot->Y-plot->CY)) +
-						(u16)sqrt((plot->BX-plot->CX)*(plot->BX-plot->CX) + (plot->BY-plot->CY)*(plot->BY-plot->CY));
-			u16 steps = dist / minlength;
-			//printf("steps=%d\n", steps);
+			u16 dist;
+
+			if( oper->code=='C')
+			{
+				plot->BX[plot->num_points] = oper->x;
+				plot->BY[plot->num_points] = oper->y;
+			}
+			else
+			{
+				plot->BX[plot->num_points] = plot->X + oper->x;
+				plot->BY[plot->num_points] = plot->Y + oper->y;
+			}
+			if( plot->num_points == 2) //quadratic
+				dist = DISTANCE(0,1)+DISTANCE(1,2);
+			else if( plot->num_points == 3) //cubic
+				dist = (DISTANCE(0,1)+DISTANCE(2,3)+DISTANCE(0,2)+DISTANCE(1,3))/2;
+
 			plot->register1 = 0;
-			plot->register2 = steps;
+			plot->register2 = dist / minlength;
 			plot->subroutine = TRUE;
-			PLOTTER_subroutine_bezier2(plot);
+			plot->num_points++;
+			PLOTTER_subroutine_bezier(plot);
+			printf("B0(%d,%d), B1(%d,%d), B2(%d,%d), B3(%d,%d), num_points=%d, seg=%d\n", plot->BX[0],plot->BY[0],plot->BX[1],plot->BY[1],plot->BX[2],plot->BY[2],plot->BX[3],plot->BY[3],plot->num_points,plot->register2);
+			#undef DISTANCE
 		}
 		break;
 	}
@@ -400,7 +500,7 @@ void PLOTTER_operation(PLOTTER* plot, OPER* oper)
 	switch (oper->code)
 	{
 		case 'M': case 'm':
-		PLOTTER_penup(plot);
+			PLOTTER_penup(plot);
 		break;
 
 		case 'L': case 'l': case 'C': case 'c':
@@ -423,9 +523,13 @@ u8 PLOTTER_signal(PLOTTER* plot) //signal that one operation has been finished
 			break;
 
 			case '^': //control
-				if( (u8)oper->x=='Q')
+				switch((u8)oper->x)
 				{
-					//plot->opercurr = -1; //repeat all the operations again
+					case 'P': //end of page, wait for next page
+					return 'P';
+					case 'Q': //end of file
+					MOTOR_toangle(&plot->pen, plot->penupangle, 20000, 0, 0);
+					MOTOR_update(&plot->pen);
 					return 'Q';
 				}
 			break;
@@ -435,11 +539,11 @@ u8 PLOTTER_signal(PLOTTER* plot) //signal that one operation has been finished
 		}
 	}
 	else
-	{	//an operational step of a subroutine has been finished
+	{	//a sub step of subroutine has been finished
 		switch( oper->code)
 		{
 			case 'C': case 'c':
-				PLOTTER_subroutine_bezier2(plot); //next step of subroutine
+				PLOTTER_subroutine_bezier(plot); //next step of subroutine
 			break;
 		}
 	}
@@ -452,13 +556,14 @@ u8 PLOTTER_update(PLOTTER* plot)
 		(plot->axis.angle==plot->axis.to_angle) &&
 		(plot->pen.angle==plot->pen.to_angle) )
 	{	//all three motors reached destination angle
-		if( !plot->subroutine)
-			LongDelay(5000);
+		//if( !plot->subroutine)
+			//LongDelay(5000);
 		return PLOTTER_signal(plot);
 	}
 
 	if( plot->pen.angle==plot->pen.to_angle)
 	{
+		MOTOR_update(&plot->pen);
 		MOTOR_update(&plot->base);
 		MOTOR_update(&plot->axis);
 	}

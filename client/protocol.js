@@ -11,14 +11,14 @@ define(['states','serial'],function(states)
 				//initialize
 				chrome.serial.getPorts(function(ports)
 				{
+					log('Robotic Plotter Arm client');
+					llog('available serial ports: ');
 					log(ports);
 				});
 				$('cmd1').innerHTML='connect port';
 				$('cmd1').onclick=function()
 				{
 					proto.event('connect',$('param1').value);
-					$('cmd1').innerHTML='';
-					$('cmd1').onclick=null;
 				}
 				proto.send=function(buffer)
 				{
@@ -45,6 +45,11 @@ define(['states','serial'],function(states)
 						},
 						function(con)
 						{
+							if( con.connectionId===-1)
+							{
+								log('failed to open serial port');
+								return;
+							}
 							connectionInfo = con;
 							log(con);
 							chrome.serial.setControlSignals(con.connectionId,
@@ -125,7 +130,7 @@ define(['states','serial'],function(states)
 					{
 						if( proto.onreceive)
 							proto.onreceive(received);
-						return 'send'; //go to state send
+						return 'ready'; //go to state ready
 					}
 				},
 				data:
@@ -133,17 +138,41 @@ define(['states','serial'],function(states)
 					timer:null
 				}
 			},
-			send:
+			ready:
 			{
 				event:
 				{
+					entry: function(proto)
+					{
+						this.data.timer = setTimeout(function()
+						{
+							if( proto.onready)
+								proto.onready();
+						},1);
+					},
+					exit: function()
+					{
+						clearTimeout(this.data.timer);
+						this.data.timer=null;
+					},
 					send: function(proto,event,buffer)
 					{
 						SERIAL_send(buffer,function(writeinfo)
 						{
 							proto.event('sent',writeinfo);
 						});
-					},
+						return 'sending';
+					}
+				},
+				data:
+				{
+					timer:null
+				}
+			},
+			sending:
+			{
+				event:
+				{
 					sent: function(proto,event,writeinfo)
 					{
 						log(writeinfo);
@@ -154,17 +183,6 @@ define(['states','serial'],function(states)
 		}
 	}
 
-	function $(id)
-	{
-		return document.getElementById(id)
-	}
-	function log(text)
-	{
-		if( typeof text !== 'string')
-			text = JSON.stringify(text,null,'');
-		$('logger').value += text+'\n';
-		$('logger').scrollTop += 20;
-	}
 	function Runner(sequence)
 	{
 		var This=this;

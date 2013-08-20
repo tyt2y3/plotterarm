@@ -19,7 +19,7 @@
           
           
           
-        <Column0>313</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+        <Column0>129</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
       </Workspace>
       <Disassembly>
         
@@ -31,7 +31,7 @@
       
       
       
-    <Wnd2>
+    <Wnd1>
         <Tabs>
           <Tab>
             <Identity>TabID-25535-20201</Identity>
@@ -43,20 +43,20 @@
           </Tab>
         </Tabs>
         
-      <SelectedTab>0</SelectedTab></Wnd2><Wnd3><Tabs><Tab><Identity>TabID-22520-25723</Identity><TabName>Debug Log</TabName><Factory>Debug-Log</Factory><Session/></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd3></Windows>
+      <SelectedTab>0</SelectedTab></Wnd1><Wnd3><Tabs><Tab><Identity>TabID-22520-25723</Identity><TabName>Debug Log</TabName><Factory>Debug-Log</Factory><Session/></Tab><Tab><Identity>TabID-768-10851</Identity><TabName>Terminal I/O</TabName><Factory>TerminalIO</Factory><Session/></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd3></Windows>
     <Editor>
       
       
       
       
-    <Pane><Tab><Factory>TextEditor</Factory><Filename>F:\elec3300-project\plotterarm\embedded\Project\main.c</Filename><XPos>0</XPos><YPos>1</YPos><SelStart>245</SelStart><SelEnd>245</SelEnd></Tab><ActiveTab>0</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>F:\elec3300-project\plotterarm\embedded\Project\plotter.c</Filename><XPos>0</XPos><YPos>113</YPos><SelStart>1969</SelStart><SelEnd>1969</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>F:\elec3300-project\plotterarm\embedded\Project\motor.c</Filename><XPos>0</XPos><YPos>36</YPos><SelStart>1719</SelStart><SelEnd>1719</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>F:\elec3300-project\plotterarm\embedded\Project\pwm.c</Filename><XPos>0</XPos><YPos>96</YPos><SelStart>3269</SelStart><SelEnd>3269</SelEnd></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Pane/><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
     <Positions>
       
       
       
       
       
-    <Top><Row0><Sizes><Toolbar-00693e40><key>iaridepm.enu1</key></Toolbar-00693e40></Sizes></Row0><Row1><Sizes><Toolbar-07ae7178><key>debuggergui.enu1</key></Toolbar-07ae7178></Sizes></Row1></Top><Left><Row0><Sizes><Wnd2><Rect><Top>-2</Top><Left>-2</Left><Bottom>710</Bottom><Right>387</Right><x>-2</x><y>-2</y><xscreen>332</xscreen><yscreen>268</yscreen><sizeHorzCX>172917</sizeHorzCX><sizeHorzCY>272635</sizeHorzCY><sizeVertCX>202604</sizeVertCX><sizeVertCY>724313</sizeVertCY></Rect></Wnd2></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd3><Rect><Top>-2</Top><Left>-2</Left><Bottom>198</Bottom><Right>1922</Right><x>-2</x><y>-2</y><xscreen>1924</xscreen><yscreen>200</yscreen><sizeHorzCX>1002083</sizeHorzCX><sizeHorzCY>203459</sizeHorzCY><sizeVertCX>104167</sizeVertCX><sizeVertCY>203459</sizeVertCY></Rect></Wnd3></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+    <Top><Row0><Sizes><Toolbar-01cf2928><key>iaridepm.enu1</key></Toolbar-01cf2928></Sizes></Row0><Row1><Sizes><Toolbar-075c9b28><key>debuggergui.enu1</key></Toolbar-075c9b28></Sizes></Row1></Top><Left><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>475</Bottom><Right>228</Right><x>-2</x><y>-2</y><xscreen>195</xscreen><yscreen>168</yscreen><sizeHorzCX>156250</sizeHorzCX><sizeHorzCY>236287</sizeHorzCY><sizeVertCX>184295</sizeVertCX><sizeVertCY>670886</sizeVertCY></Rect></Wnd1></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd3><Rect><Top>-2</Top><Left>-2</Left><Bottom>161</Bottom><Right>1250</Right><x>-2</x><y>-2</y><xscreen>1252</xscreen><yscreen>163</yscreen><sizeHorzCX>1003205</sizeHorzCX><sizeHorzCY>229255</sizeHorzCY><sizeVertCX>94551</sizeVertCX><sizeVertCY>175809</sizeVertCY></Rect></Wnd3></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
   </Desktop>
 </Project>
 

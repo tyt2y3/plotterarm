@@ -4,8 +4,7 @@
 /** a class to control multiple servo motors concurrently
 	- each MOTOR outputs a PWM signal to a GPIO port
 	- calibration of operational range
-	- control a servo motor to rotate to an absolute angle
-		with precise speed up to 2 decimal places
+	- control a servo motor to rotate to an absolute angle with precise speed up to 2 decimal places
 	- do integer computation only
  */
 
@@ -72,7 +71,9 @@ void MOTOR_update(MOTOR* M)
 
 	if( div != 0)
 	{
-		if( diva < M->angle_speed)
+		if( diva < M->angle_speed ||
+			(M->counter%10==0 && diva < M->angle_speed_dp1) ||
+			(M->counter%100==0 && diva < M->angle_speed_dp2))
 			M->angle = M->to_angle;
 		else
 		{
@@ -84,15 +85,12 @@ void MOTOR_update(MOTOR* M)
 					M->angle_speed--; */
 			
 			s16 offset = M->angle_speed;
-			if( M->counter % 10 == 0)
+			if( M->counter%10==0)
 				offset += M->angle_speed_dp1;
-			if( M->counter % 100 == 0)
+			if( M->counter%100==0)
 				offset += M->angle_speed_dp2;
 			
-			if( div > 0)
-				M->angle += offset;
-			else
-				M->angle -= offset;
+			M->angle += div>0? offset:-offset;
 		}
 		u16 width = M->max_pulse - ((M->max_angle - M->angle) * (M->max_pulse - M->min_pulse) / (M->max_angle - M->min_angle));
 		MOTOR_update_pulsewidth(M, width);

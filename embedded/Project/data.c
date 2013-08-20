@@ -1,5 +1,5 @@
 //plotterarm operations
-OPER data[]={
+OPER drawing[]={
 /**
 {'A',9000,4500}, //turn base to 90 degree, axis to 45 degree
 {'a',1000,2000}, //turn 10 and 20 degree respectively
@@ -11,16 +11,17 @@ OPER data[]={
 {'C',300,400}, //draw a degree2 bezier curve to (300,400)
 {'b',50,50}, //control point relative to the current point of the plotter
 {'c',100,150}, //bezier curve relative to the current point of the plotter
-{'Q',0,0} //quit, indicating the last operation
+{'^','Q',0} //quit, indicating the last operation
+*/
+/**
+{'M',2200,1900}, //upper left range
+{'M',1000,2400}, //upper right range
+{'M',2500,0}, //lower left range
+{'M',1100,0}, //lower right range
+{'M',2000,1900},{'l',100,0},{'l',100,0},{'l',100,0},{'l',100,0},{'m',-400,100}, //out of range example
 */
 
-//{'M',2200,1900}, //upper left range
-//{'M',1000,2400}, //upper right range
-//{'M',2500,0}, //lower left range
-//{'M',1100,0}, //lower right range
-//{'M',2000,1900},{'l',100,0},{'l',100,0},{'l',100,0},{'l',100,0},{'m',-400,100}, //out of range example
-
- //a 4x4 grid
+/* //a 4x4 grid
 {'M',2000,0},
 {'l',400,0},{'m',-400,100},
 {'l',400,0},{'m',-400,100},
@@ -33,8 +34,8 @@ OPER data[]={
 {'l',0,400},{'m',100,-400},
 {'l',0,400},{'m',100,-400},
 {'l',0,400},
-//{'m',-400,-400}, //a cross inside
-//{'l',400,400},{'m',-400,0},{'l',400,-400},
+{'m',-400,-400}, //a cross inside
+{'l',400,400},{'m',-400,0},{'l',400,-400}, */
 
 /* //a circle in a square
 {'M',2000,500},
@@ -160,7 +161,7 @@ OPER data[]={
 {'B',1330,305},{'C',1405,405}, */
 
 
-/* //hugo's automaton drawing
+ //hugo's automaton drawing
 {'M',1382,1838},{'B',1002,1853},{'C',923,1362},
 {'M',903,1184},{'B',784,535},{'C',1442,507},
 {'B',1576,455},{'C',1683,507},
@@ -804,8 +805,7 @@ OPER data[]={
 {'B',2012,178},{'C',2095,162},
 {'L',2111,150},
 {'L',2115,127},
-{'L',2099,111}, */
+{'L',2099,111}, //*/
 
-
-{'Q',0,0}
+{'^','Q',0}
 };

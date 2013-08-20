@@ -101,3 +101,123 @@ function SERIAL_close(callback)
 {
 	chrome.serial.close(connectionInfo.connectionId, callback?callback:function(){});
 }
+
+/*
+function test()
+{
+	var run = new Runner(
+	[
+		function()
+		{
+			chrome.serial.getPorts(run.callback);
+		},
+		function(ports)
+		{
+			log(ports);
+			chrome.serial.open("COM4",
+			{
+				bitrate: 115200
+			}, run.callback);
+		},
+		function(con)
+		{
+			connectionInfo = con;
+			log(connectionInfo);
+			chrome.serial.setControlSignals(connectionInfo.connectionId,
+				{
+					dtr: true,
+					rts: true,
+					dcd: true,
+					cts: true
+				}, run.callback);
+		},
+		function()
+		{
+			chrome.serial.getControlSignals(connectionInfo.connectionId,
+				run.callback);
+		},
+		function(sign)
+		{
+			log(sign);
+			$('cmd1').innerHTML='shake hand';
+			$('cmd1').onclick = function()
+			{
+				SERIAL_receive(function(received)
+				{
+					log(received);
+					SERIAL_send('hello from chrome',function(writeInfo)
+					{
+						log(writeInfo);
+					});
+				});
+			}
+		}
+	]);
+	run.callback();
+}
+function test2()
+{
+	chrome.serial.getPorts(function(ports)
+	{
+		log(ports);
+	});
+	$('cmd1').innerHTML='connect port';
+	$('cmd1').onclick=function()
+	{
+		var run = new Runner(
+		[
+			function()
+			{
+				chrome.serial.open($('param1').value,
+				{
+					bitrate: 115200
+				}, run.callback);
+			},
+			function(con)
+			{
+				connectionInfo = con;
+				log(connectionInfo);
+				chrome.serial.setControlSignals(connectionInfo.connectionId,
+					{
+						dtr: true,
+						rts: true,
+						dcd: true,
+						cts: true
+					}, run.callback);
+			},
+			function()
+			{
+				chrome.serial.getControlSignals(connectionInfo.connectionId,
+					run.callback);
+			},
+			function(sign)
+			{
+				log(sign);
+				$('cmd1').innerHTML='run';
+				$('cmd1').onclick = function()
+				{
+					var loop = new Runner(
+					[
+						function()
+						{
+							SERIAL_receive(loop.callback);
+						},
+						function(received)
+						{
+							log(received);
+							SERIAL_send('hello from chrome',loop.callback);
+						},
+						function()
+						{
+							loop.i=-1;
+							setTimeout(loop.callback,2000);
+						}
+					]);
+					loop.callback();
+				}
+			}
+		]);
+		run.callback();
+	}
+} */
+

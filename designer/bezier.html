@@ -1,0 +1,96 @@
+<body>
+<script src='raphael-min.js'></script>
+<script src='dragger.js'></script>
+<script src='drawer.js'></script>
+
+<div class='main_canvas' id='canvas' style='width:800px; height:600px;'>
+</div>
+
+<script>
+(function()
+{
+
+function distance(a,b)
+{
+	return Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
+}
+function abs(x)
+{
+	return x>=0?x:-x;
+}
+
+function demo_application1()
+{
+	var TP = new drawer();
+	var DG = new dragger(TP,'canvas');
+	var rl = Raphael('canvas');
+	var P=TP.P=[ {x:200,y:300}, {x:300,y:200}, {x:400,y:300}, {x:500,y:200} ];
+	//
+	TP.redraw=function()
+	{
+		rl.clear();
+		rl.rect(0,0,800-1,600-1).attr({fill:'none'});
+
+		TP.moveTo(P[0]);
+		for( var i=1; i<P.length; i++)
+			TP.lineTo(P[i]);
+		bezier2();
+		bezier3();
+		TP.drawpath(rl);
+	}
+	function bezier2() {
+		rl.path('M'+pos(P[0])+'Q'+pos(P[1])+','+pos(P[2]))
+			.attr( {stroke:"#f00", "stroke-width": 0.6});
+		//
+		var minlength = 20;
+		var dist = distance(P[0],P[1])+distance(P[1],P[2]);
+		var steps = dist / minlength;
+		TP.moveTo(P[0],3);
+		for (var i=1; i<steps; i++) {
+			var pp = getstep(getstep(P[0], P[1], i, steps), getstep(P[1], P[2], i, steps), i, steps);
+			TP.lineTo(pp,3);
+			TP.drawpoint(pp,3,3);
+		}
+		TP.lineTo(P[2],3);
+	}
+	function bezier3() {
+		rl.path('M'+pos(P[0])+'C'+pos(P[1])+','+pos(P[2])+','+pos(P[3]))
+			.attr( {stroke:"#f00", "stroke-width": 0.6});
+		//
+		var minlength = 20;
+		var dist = (distance(P[0],P[1])+distance(P[2],P[3])+distance(P[0],P[2])+distance(P[1],P[3]))/2;
+		var steps = dist / minlength;
+		TP.moveTo(P[0],3);
+		for (var i=1; i<steps; i++) {
+			var pp = getstep(
+					getstep(getstep(P[0], P[1], i, steps), getstep(P[1], P[2], i, steps), i, steps),
+					getstep(getstep(P[1], P[2], i, steps), getstep(P[2], P[3], i, steps), i, steps),
+					i, steps);
+			TP.lineTo(pp,3);
+			TP.drawpoint(pp,3,3);
+		}
+		TP.lineTo(P[3],3);
+	}
+	function getstep(P1, P2, stepcount, numofsteps) {
+		return {
+			x: ((numofsteps - stepcount) * P1.x + stepcount * P2.x) / numofsteps,
+			y: ((numofsteps - stepcount) * P1.y + stepcount * P2.y) / numofsteps
+		}
+	}
+	function pos(pp)
+	{
+		return pp.x+' '+pp.y;
+	}
+
+	this.change=function()
+	{
+	}
+
+	//init
+	TP.redraw();
+}
+
+app1 = new demo_application1();
+}());
+</script>
+</body>
