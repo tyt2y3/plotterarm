@@ -13,8 +13,6 @@ The C program embedded into STM32 (specifically the STM3210E emulation board) th
 
 # Information
 
-This happened to be the coursework which earned me A+ in __ELEC3300 Introduction to Embedded Systems__ course in 2012fall in HKUST. I now have to carry on the project to __mk.__ ___II___ .
-
 ![](http://3.bp.blogspot.com/-xsAI44SCJmI/UNaJEnoWgEI/AAAAAAAALjg/GdOxkUeBgj0/s1600/DSC01698.JPG)
 ![](http://1.bp.blogspot.com/-F_xH2jl58v0/UNbGGdaR_xI/AAAAAAAALts/Qb0MChvGTkE/s1600/p12.png)
 ![](http://1.bp.blogspot.com/-Q7ZIw9qCRKo/UN8TcLZx9AI/AAAAAAAALvE/FwlcNFzOgy0/s1600/Sequence+02%255B23-57-50%255D.JPG)
